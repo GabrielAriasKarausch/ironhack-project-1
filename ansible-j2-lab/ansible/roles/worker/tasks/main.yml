@@ -1,0 +1,12 @@
+- name: Pull worker image
+  docker_image:
+    name: dockersamples/examplevotingapp_worker
+    source: pull
+
+- name: Run worker container
+  docker_container:
+    name: worker
+    image: dockersamples/examplevotingapp_worker
+    env:
+      REDIS_HOST: 10.0.2.207
+      DB_HOST: 10.0.3.182

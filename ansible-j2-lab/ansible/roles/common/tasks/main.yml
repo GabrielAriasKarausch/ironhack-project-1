@@ -1,0 +1,15 @@
+- name: Update apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started

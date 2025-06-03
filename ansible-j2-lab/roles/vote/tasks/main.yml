@@ -1,0 +1,27 @@
+---
+- name: Instalar Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Habilitar y arrancar el servicio Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Pull vote image
+  docker_image:
+    name: dockersamples/examplevotingapp_vote
+    source: pull
+
+- name: Run vote container
+  docker_container:
+    name: vote
+    image: dockersamples/examplevotingapp_vote
+    ports:
+      - "5000:80"
+    env:
+      REDIS_HOST: 10.0.3.182  # IP de tu servidor Redis
+

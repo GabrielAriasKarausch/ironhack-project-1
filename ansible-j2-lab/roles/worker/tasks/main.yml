@@ -1,0 +1,27 @@
+- name: Instalar Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Habilitar y arrancar el servicio Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Pull worker image
+  docker_image:
+    name: dockersamples/examplevotingapp_worker
+    source: pull
+
+- name: Run worker container
+  docker_container:
+    name: worker
+    image: dockersamples/examplevotingapp_worker
+    env:
+      REDIS_HOST: 127.0.0.1
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PASSWORD: postgres

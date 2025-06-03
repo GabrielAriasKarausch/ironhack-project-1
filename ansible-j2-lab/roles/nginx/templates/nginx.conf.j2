@@ -1,0 +1,19 @@
+upstream vote_app {
+    server {{ hostvars['vote'].ansible_host }}:5000;
+}
+
+upstream result_app {
+    server {{ hostvars['result'].ansible_host }}:5001;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://vote_app;
+    }
+
+    location /result {
+        proxy_pass http://result_app;
+    }
+}

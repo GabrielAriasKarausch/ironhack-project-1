@@ -1,0 +1,15 @@
+---
+- name: Pull result image
+  docker_image:
+    name: dockersamples/examplevotingapp_result
+    source: pull
+
+- name: Run result container
+  docker_container:
+    name: result
+    image: dockersamples/examplevotingapp_result
+    ports:
+      - "5001:80"
+    env:
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PASSWORD: postgres

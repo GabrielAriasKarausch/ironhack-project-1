@@ -1,0 +1,11 @@
+- name: Run Postgres container
+  docker_container:
+    name: db
+    image: postgres
+    state: started
+    restart_policy: always
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
