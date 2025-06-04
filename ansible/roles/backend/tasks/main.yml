@@ -1,0 +1,26 @@
+---
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Start and enable Docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Run Redis container
+  community.docker.docker_container:
+    name: redis
+    image: redis:alpine
+    state: started
+    restart_policy: always
+
+- name: Run backend worker container
+  community.docker.docker_container:
+    name: worker
+    image: pokfinner/worker:latest
+    state: started
+    restart_policy: always

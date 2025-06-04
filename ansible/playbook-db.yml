@@ -1,0 +1,41 @@
+---
+- name: Deploy db microservice
+  hosts: db
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Docker if not present
+      ansible.builtin.package:
+        name: docker.io
+        state: present
+
+    - name: Create microservices network (if not exists)
+      docker_network:
+        name: microservices
+        state: present
+
+    - name: Pull Docker image for postgres
+      docker_image:
+        name: postgres
+        source: pull
+        tag: latest
+
+    - name: Run postgres
+      docker_container:
+        name: postgres
+        image: postgres:latest
+        state: started
+        restart_policy: always
+        env:
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "postgres"
+          POSTGRES_DB: "postgres"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        networks:
+          - name: microservices

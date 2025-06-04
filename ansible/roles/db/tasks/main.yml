@@ -1,0 +1,25 @@
+---
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Start and enable Docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Run PostgreSQL container
+  community.docker.docker_container:
+    name: postgres
+    image: postgres:9.4
+    state: started
+    restart_policy: always
+    ports:
+      - "5432:5432"
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres

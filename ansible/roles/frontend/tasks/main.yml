@@ -1,0 +1,21 @@
+---
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Start and enable Docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Run frontend container
+  community.docker.docker_container:
+    name: frontend
+    image: gabrielariaskarausch/frontend:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "8080:80"

@@ -1,0 +1,19 @@
+---
+- name: Deploy PostgreSQL on DB server
+  hosts: db
+  become: true
+  roles:
+    - db
+
+- name: Deploy backend service and Redis
+  hosts: backend
+  become: true
+  roles:
+    - backend
+
+- name: Deploy frontend service
+  hosts: frontend
+  become: true
+  roles:
+    - frontend
+
